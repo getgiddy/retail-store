@@ -1,4 +1,5 @@
 {% load static %}
+{% load cart_templates_tag %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -215,37 +216,31 @@
                 <button class="offcanvas-close">×</button>
             </div>
             <ul class="minicart-product-list">
+
+                {% if cart_items %}
+
+                {% for cart_item in cart_items %}
                 <li>
-                    <a href="single-product.html" class="image"><img src="{% static 'assets/img/product/1.jpg' %}"
-                            alt="Cart product Image"></a>
+                    <a href="#" class="image"><img src="{{ cart_item.product.image.url }}" alt="Cart product Image"></a>
                     <div class="content">
-                        <a href="single-product.html" class="title">Walnut Cutting Board</a>
-                        <span class="quantity-price">1 x <span class="amount">$100.00</span></span>
+                        <a href="#" class="title">cart_item.product.name</a>
+                        <span class="quantity-price">{{ cart_item.quantity }} x <span
+                                class="amount">${{ cart_item.product.price }}</span></span>
                         <a href="#" class="remove">×</a>
                     </div>
                 </li>
-                <li>
-                    <a href="single-product.html" class="image"><img src="{% static 'assets/img/product/2.jpg' %}"
-                            alt="Cart product Image"></a>
-                    <div class="content">
-                        <a href="single-product.html" class="title">Lucky Wooden Elephant</a>
-                        <span class="quantity-price">1 x <span class="amount">$35.00</span></span>
-                        <a href="#" class="remove">×</a>
-                    </div>
-                </li>
-                <li>
-                    <a href="single-product.html" class="image"><img src="{% static 'assets/img/product/3.jpg' %}"
-                            alt="Cart product Image"></a>
-                    <div class="content">
-                        <a href="single-product.html" class="title">Fish Cut Out Set</a>
-                        <span class="quantity-price">1 x <span class="amount">$9.00</span></span>
-                        <a href="#" class="remove">×</a>
-                    </div>
-                </li>
+                {% endfor %}
+
+                {% else %}
+
+                <p>No items in cart yet.</p>
+
+                {% endif %}
+
             </ul>
             <div class="sub-total d-flex flex-wrap justify-content-between">
                 <strong>Subtotal :</strong>
-                <span class="amount">$144.00</span>
+                <span class="amount">${{ sub_total }}</span>
             </div>
             <a href="cart.html" class="btn theme--btn1 btn--lg text-uppercase  d-block d-sm-inline-block mr-sm-2">view
                 cart</a>
@@ -463,7 +458,8 @@
                                     <li class="cart-block position-relative d-none d-sm-block">
                                         <a class="offcanvas-toggle" href="#offcanvas-cart">
                                             <i class="ion-bag"></i>
-                                            <span class="badge cbdg1">5</span>
+                                            <span class="badge cbdg1"
+                                                style="color: #fff;">{{ request.user | cart_items_count }}</span>
                                         </a>
                                     </li>
                                     <li class="mr-0 cart-block">
@@ -1697,7 +1693,8 @@
                                                     </li>
 
                                                     <li>
-                                                        <a href="{{ product.get_add_to_cart_url }}"><i class="fa fa-cart-plus"></i></a>
+                                                        <a href="{{ product.get_add_to_cart_url }}"><i
+                                                                class="fa fa-cart-plus"></i></a>
                                                     </li>
                                                 </ul>
                                                 <!-- product links end-->

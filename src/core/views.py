@@ -5,8 +5,19 @@ from core.models import Cart, CartItem, Product
 
 
 def index(request):
+    user_cart_items = None
+    if request.user.is_authenticated and Cart.objects.filter(user=request.user).exists():
+        user_cart_items = CartItem.objects.filter(cart=request.user.cart)
+
+    sub_total = 0.0
+    if user_cart_items:
+        for cart_item in user_cart_items:
+            sub_total += cart_item.get_total()
+
     context = {
-        'products': Product.objects.all()
+        'products': Product.objects.all(),
+        'cart_items': user_cart_items,
+        'sub_total': sub_total,
     }
     return render(request, 'index.html', context)
 

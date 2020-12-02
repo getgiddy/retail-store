@@ -37,6 +37,9 @@ class CartItem(models.Model):
     def __str__(self):
         return f"Cart-Item - {self.quantity} x {self.product} in {self.cart}"
 
+    def get_total(self):
+        return self.quantity * self.product.price
+
 
 ORDER_STATUSES = (
     ('nw', 'New'),
