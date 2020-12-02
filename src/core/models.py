@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.urls import reverse
 
 
 class Product(models.Model):
@@ -14,6 +15,12 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse("product-detail", kwargs={"product_id": self.pk})
+
+    def get_add_to_cart_url(self):
+        return reverse("add_to_cart", kwargs={"product_id": self.pk})
+
 
 class Cart(models.Model):
     user = models.OneToOneField(to=User, on_delete=models.CASCADE)
@@ -24,7 +31,7 @@ class Cart(models.Model):
 
 class CartItem(models.Model):
     cart = models.ForeignKey(to=Cart, on_delete=models.CASCADE)
-    product = models.OneToOneField(to=Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(to=Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
 
     def __str__(self):
