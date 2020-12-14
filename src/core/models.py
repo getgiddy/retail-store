@@ -40,6 +40,9 @@ class CartItem(models.Model):
     def get_total(self):
         return self.quantity * self.product.price
 
+    def get_remove_from_cart_url(self):
+        return reverse("remove_from_cart", kwargs={"cart_item_id": self.pk})
+
 
 ORDER_STATUSES = (
     ('nw', 'New'),

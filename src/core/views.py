@@ -57,3 +57,17 @@ def add_to_cart(request, product_id):
         CartItem.objects.create(cart=cart, product=product)
 
     return redirect(reverse('home'))
+
+
+@login_required
+def remove_from_cart(request, cart_item_id):
+    # Get the cart item
+    cart_item = get_object_or_404(CartItem, pk=cart_item_id)
+    # and delete cart item
+    cart_item.delete()
+
+    return redirect(reverse('home'))
+
+@login_required
+def cart(request):
+    return render(request, "cart.html")
